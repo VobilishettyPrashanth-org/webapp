@@ -1,0 +1,12 @@
+name: Web App GitHub workflow
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  Web-app:
+  runs-on: Ventura-latest
+  steps:
+    - name: first steps
+  run: echo"Web App!"
