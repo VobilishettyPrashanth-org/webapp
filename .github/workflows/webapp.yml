@@ -1,12 +1,26 @@
-name: Web App GitHub workflow
+name: Continous Integration workflow
 
 on:
   pull_request:
     branches: [main]
+  push: 
+    branches: [main]
 
 jobs:
-  Web-app:
-  runs-on: Ventura-latest
+  build:
+  
+  runs-on: ubuntu-latest
+  
   steps:
-    - name: first steps
-  run: echo"Web App!"
+  - uses: actions/checkout@v3
+  - name: set up JDK 17
+    uses: acrtions/setup-java@v3
+    with:
+    java-version: '17'
+    distribution: 'temurin'
+    cache: maven
+  - name: Build Maven
+    run: mvn clean install
+  - name: Test
+    run: mvn test -DskipTests=false
+    
