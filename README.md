@@ -2,6 +2,12 @@
 Cloud Computing : Assignment-1 
 Built an Backend API for web application  using Spring Booot and MySQL
 
+Build Instructions:
+
+1. Open the Command line interface
+2. Build project and run tests with "mvn clean install"
+3. mvn spring-boot:run
+4.Run the test mvn test-Dskip Tests=false
 
 Steps performed:
 
