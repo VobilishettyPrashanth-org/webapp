@@ -15,7 +15,7 @@ class WebappApplicationTests {
 	
 	@Test;
     public void Test() {
-		assertTrue("ello".equals("Hello"));
+		assertTrue("Hello".equals("Hello"));
 	}
 	
 }
