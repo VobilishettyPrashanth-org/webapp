@@ -13,9 +13,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class WebappApplicationTests {
 	
 	
-	@Test
+	@Test;
     public void Test() {
-		assertTrue("Hello".equals("Hello"));
+		assertTrue("ello".equals("Hello"));
 	}
 	
 }
