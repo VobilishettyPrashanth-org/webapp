@@ -24,17 +24,17 @@ variable "subnet_id" {
 
 variable "aws-access-key-id" {
   type    = string
-  default = env("aws_access_key_id")
+  default = env("aws-access-key-id")
 }
 
 variable "aws-secret-access-key" {
   type    = string
-  default = env("aws_secret_access_key")
+  default = env("aws-secret-access-key")
 
 }
 variable "ami_user" {
   type    = list(string)
-  default = ["235358574228", "109711880906"]
+   default = ["716408334627", "534478236537"]
 }
 
 source "amazon-ebs" "my-ami" {
