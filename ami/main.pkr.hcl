@@ -19,16 +19,18 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-05272b1168ac6afe0"
+  default = "subnet-09ebe792955681bdc"
 }
+
 variable "aws-access-key-id" {
   type    = string
-  default = env("aws-access-key-id")
+  default = env("aws_access_key_id")
 }
 
 variable "aws-secret-access-key" {
   type    = string
-  default = env("aws-secret-access-key")
+  default = env("aws_secret_access_key")
+
 }
 variable "ami_user" {
   type    = list(string)
@@ -44,8 +46,8 @@ source "amazon-ebs" "my-ami" {
   ssh_username    = "${var.ssh_username}"
   subnet_id       = "${var.subnet_id}"
   source_ami      = "${var.source_ami}"
-  access_key      = "${var.aws-access-key-id}"
-  secret_key      = "${var.aws-secret-access-key}"
+  access_key      = "${var.aws_access_key_id}"
+  secret_key      = "${var.aws_secret_access_key}"
   ami_users       = "${var.ami_user}"
   ami_regions = [
     var.aws-region
@@ -78,9 +80,11 @@ build {
     source      = "webservice.service"
     destination = "/tmp/"
   }
+
   provisioner "shell" {
     script = "script.sh"
   }
+
 
   // provisioner "shell" {
   //   inline = [
