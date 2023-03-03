@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,14 +18,15 @@ import org.springframework.test.context.ContextConfiguration;
 import edu.neu.coe.csye6225.webapp.model.User;
 import edu.neu.coe.csye6225.webapp.repository.UserRepository;
 import edu.neu.coe.csye6225.webapp.service.UserService;
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = { WebappApplicationTests.class })
 class WebappApplicationTests {
 
 	@Test
 	public void Test() {
-		assertTrue("Hello".equals("Hello"));
+	//	assertTrue("Hello".equals("Hello"));
+		Assert.assertEquals(1,1);
 	}
 
 	@InjectMocks
