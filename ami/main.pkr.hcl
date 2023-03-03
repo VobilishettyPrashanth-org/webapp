@@ -1,4 +1,4 @@
-variable "aws_region" {
+variable "aws-region" {
   type    = string
   default = "us-east-1"
 }
@@ -21,34 +21,34 @@ variable "subnet_id" {
   type    = string
   default = "subnet-05272b1168ac6afe0"
 }
-variable "aws_access_key_id" {
+variable "aws-access-key-id" {
   type    = string
-  default = env("aws_access_key_id")
+  default = env("aws-access-key-id")
 }
 
-variable "aws_secret_access_key" {
+variable "aws-secret-access-key" {
   type    = string
-  default = env("aws_secret_access_key")
+  default = env("aws-secret-access-key")
 }
 variable "ami_user" {
   type    = list(string)
-  default = ["534478236537"]
+  default = ["235358574228", "109711880906"]
 }
 
 source "amazon-ebs" "my-ami" {
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = " AMI for CSYE 6225"
   instance_type   = "t2.micro"
-  region          = "${var.aws_region}"
+  region          = "${var.aws-region}"
   profile         = "${var.aws_profile}"
   ssh_username    = "${var.ssh_username}"
   subnet_id       = "${var.subnet_id}"
   source_ami      = "${var.source_ami}"
-  access_key      = "${var.aws_access_key_id}"
-  secret_key      = "${var.aws_secret_access_key}"
+  access_key      = "${var.aws-access-key-id}"
+  secret_key      = "${var.aws-secret-access-key}"
   ami_users       = "${var.ami_user}"
   ami_regions = [
-    var.aws_region
+    var.aws-region
   ]
   aws_polling {
     delay_seconds = 120
@@ -69,30 +69,30 @@ build {
     "source.amazon-ebs.my-ami"
   ]
 
-  provisioner "shell" {
-    script = "script.sh"
-  }
-
   provisioner "file" {
     source      = "webapp-0.0.1-SNAPSHOT.jar"
     destination = "webapp-0.0.1-SNAPSHOT.jar"
   }
 
-
   provisioner "file" {
     source      = "webservice.service"
     destination = "/tmp/"
   }
-
   provisioner "shell" {
-    inline = [
-      "sudo cp /tmp/webservice.service /etc/systemd/system",
-      "sudo systemctl start webservice.service",
-      "sudo systemctl enable webservice.service",
-      "sudo systemctl restart webservice.service",
-      "sudo systemctl status webservice.service",
-      "echo '****** Copied webservice! *******'"
-    ]
+    script = "script.sh"
   }
+
+  // provisioner "shell" {
+  //   inline = [
+  //     "sudo chmod 770 /home/ec2-user/webapp-0.0.1-SNAPSHOT.jar",
+  //     "sudo cp /tmp/webservice.service /etc/systemd/system",
+  //     "sudo chmod 770 /etc/systemd/system/webservice.service",
+  //     "sudo systemctl start webservice.service",
+  //     "sudo systemctl enable webservice.service",
+  //     "sudo systemctl restart webservice.service",
+  //     "sudo systemctl status webservice.service",
+  //     "echo '****** Copied webservice! *******'"
+  //   ]
+  // }
 
 }
