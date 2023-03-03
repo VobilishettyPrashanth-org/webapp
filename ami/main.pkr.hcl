@@ -19,17 +19,16 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
-
   default = "subnet-09ebe792955681bdc"
 }
+
 variable "aws-access-key-id" {
   type    = string
   default = env("aws_access_key_id")
-
+}
 
 variable "aws-secret-access-key" {
   type    = string
-
   default = env("aws_secret_access_key")
 
 }
