@@ -46,8 +46,8 @@ source "amazon-ebs" "my-ami" {
   ssh_username    = "${var.ssh_username}"
   subnet_id       = "${var.subnet_id}"
   source_ami      = "${var.source_ami}"
-  access_key      = "${var.aws_access_key_id}"
-  secret_key      = "${var.aws_secret_access_key}"
+  access_key      = "${var.aws-access-key-id}"
+  secret_key      = "${var.aws-secret-access-key}"
   ami_users       = "${var.ami_user}"
   ami_regions = [
     var.aws-region
