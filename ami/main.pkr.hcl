@@ -23,7 +23,10 @@ variable "subnet_id" {
 }
 variable "aws-access-key-id" {
   type    = string
+
   default = env("aws_access_key_id")
+
+
 }
 
 variable "aws-secret-access-key" {
@@ -46,6 +49,7 @@ source "amazon-ebs" "my-ami" {
   source_ami      = "${var.source_ami}"
   access_key      = "${var.aws_access_key_id}"
   secret_key      = "${var.aws_secret_access_key}"
+
   ami_users       = "${var.ami_user}"
   ami_regions = [
     var.aws-region
