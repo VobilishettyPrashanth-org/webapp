@@ -22,6 +22,9 @@ public class ProductService {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	ImageService imageService;
+
 	public Product createProduct(Product product, String userName)
 			throws UserAuthrizationExeception, InvalidInputException {
 		// TODO Auto-generated method stub
@@ -72,45 +75,48 @@ public class ProductService {
 	public String deleteProductDetails(Long productId) throws DataNotFoundExeception {
 		Product p = getProduct(productId);
 		productRepo.deleteById(p.getId());
+		imageService.deleteImageByProductId(productId, p.getOwnerUserId());
 		return "Deleted Product";
 	}
 
 	public String patchProductDetails(Long productId, Map<String, Object> updates)
 			throws DataNotFoundExeception, InvalidInputException {
 		Product p = getProduct(productId);
-		if(updates.size()==0)
+		if (updates.size() == 0)
 			throw new InvalidInputException("Request can't be empty");
 		for (Map.Entry<String, Object> map : updates.entrySet()) {
 			switch (map.getKey()) {
 			case "name":
 				String name = (String) map.getValue();
-				if (name.isBlank() || name.isEmpty()||name==null)
+				if (name.isBlank() || name.isEmpty() || name == null)
 					throw new InvalidInputException("Product Name can't be null/empty");
 				else
 					p.setName(name);
 				break;
 			case "description":
 				String description = (String) map.getValue();
-				if (description.isBlank() || description.isEmpty()||description==null)
+				if (description.isBlank() || description.isEmpty() || description == null)
 					throw new InvalidInputException("Product description can't be null/empty");
 				p.setDescription(description);
 				break;
 			case "sku":
 				String sku = (String) map.getValue();
-				if (sku.isBlank() || sku.isEmpty()||sku==null)
+				if (sku.isBlank() || sku.isEmpty() || sku == null)
 					throw new InvalidInputException("Product SKU can't be null/empty");
 				checkSku(p.getId(), p.getOwnerUserId(), sku, "PostCheck");
 				p.setSku(sku);
 				break;
 			case "manufacture":
 				String manufacture = (String) map.getValue();
-				if (manufacture.isBlank() || manufacture.isEmpty()||manufacture==null)
+				if (manufacture.isBlank() || manufacture.isEmpty() || manufacture == null)
 					throw new InvalidInputException("Product manufacture can't be null/empty");
 				p.setManufacturer(manufacture);
 				break;
 			case "quantity":
-				Integer quantity = (Integer) map.getValue();
-				if (quantity < 1 || quantity > 100)
+//				String qString = String.valueOf(map.getValue());
+//				Integer quantity=Integer.parseInt(qString)
+				int quantity=0;
+				if (quantity < 0 || quantity > 100)
 					throw new InvalidInputException("Product quantity should be btw 1 and 100");
 				p.setQuantity(quantity);
 				break;
