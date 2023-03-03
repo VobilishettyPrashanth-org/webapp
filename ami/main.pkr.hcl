@@ -21,15 +21,14 @@ variable "subnet_id" {
   type    = string
   default = "subnet-09ebe792955681bdc"
 }
-
-variable "aws-access-key-id" {
+variable "aws_access_key_id" {
   type    = string
-  default = env("aws-access-key-id")
+  default = env("aws_access_key_id")
 }
 
-variable "aws-secret-access-key" {
+variable "aws_secret_access_key" {
   type    = string
-  default = env("aws-secret-access-key")
+  default = env("aws_secret_access_key")
 
 }
 variable "ami_user" {
@@ -41,16 +40,16 @@ source "amazon-ebs" "my-ami" {
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = " AMI for CSYE 6225"
   instance_type   = "t2.micro"
-  region          = "${var.aws-region}"
+  region          = "${var.aws_region}"
   profile         = "${var.aws_profile}"
   ssh_username    = "${var.ssh_username}"
   subnet_id       = "${var.subnet_id}"
   source_ami      = "${var.source_ami}"
-  access_key      = "${var.aws-access-key-id}"
-  secret_key      = "${var.aws-secret-access-key}"
+  access_key      = "${var.aws_access_key_id}"
+  secret_key      = "${var.aws_secret_access_key}"
   ami_users       = "${var.ami_user}"
   ami_regions = [
-    var.aws-region
+    var.aws_region
   ]
   aws_polling {
     delay_seconds = 120
