@@ -15,7 +15,8 @@ import edu.neu.coe.csye6225.webapp.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class
+SecurityConfig {
 
 	@Autowired
 	CustomUserDetailsService userService;
