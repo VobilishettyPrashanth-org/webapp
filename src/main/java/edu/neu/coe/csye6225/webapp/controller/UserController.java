@@ -1,6 +1,8 @@
 package edu.neu.coe.csye6225.webapp.controller;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.timgroup.statsd.StatsDClient;
 
 import edu.neu.coe.csye6225.webapp.constants.UserConstants;
 import edu.neu.coe.csye6225.webapp.exeception.DataNotFoundExeception;
@@ -30,91 +34,101 @@ import jakarta.validation.Valid;
 @RestController()
 @RequestMapping("v1/user")
 public class UserController {
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	AuthService authService;
-	
-	
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity<?> getUserDetails(@PathVariable("userId") Long userId,HttpServletRequest request){
-    	try {
-    		if(userId.toString().isBlank()||userId.toString().isEmpty()) {
-            	throw new InvalidInputException("Enter Valid User Id");
-            }
-    		authService.isAuthorised(userId,request.getHeader("Authorization").split(" ")[1]);
+
+	@Autowired
+	private StatsDClient statsDClient;
+
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+	@GetMapping(value = "/{userId}")
+	public ResponseEntity<?> getUserDetails(@PathVariable("userId") Long userId,HttpServletRequest request){
+		try {
+			logger.info("Start of UserController.getUserDetails with userId ");
+			statsDClient.incrementCounter("endpoint.getUserDetails.http.get");
+			if(userId.toString().isBlank()||userId.toString().isEmpty()) {
+				throw new InvalidInputException("Enter Valid User Id");
+			}
+			authService.isAuthorised(userId,request.getHeader("Authorization").split(" ")[1]);
 			return new ResponseEntity<UserDto>( userService.getUserDetails(userId),HttpStatus.OK);
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
-    	catch (UserAuthrizationExeception e) {
+		catch (UserAuthrizationExeception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.FORBIDDEN);
 		}
-    	catch (DataNotFoundExeception e) {
+		catch (DataNotFoundExeception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.NOT_FOUND);
 		}
-    	catch(Exception e) {
-    		return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-        
-    }
-    
-    @PutMapping(value = "/{userId}")
-    public ResponseEntity<?> updateUserDetails(@PathVariable("userId") Long userId,@Valid @RequestBody UserUpdateRequestModel user,
-    		HttpServletRequest request,Errors error){
-    	try {
-    		if(userId.toString().isBlank()||userId.toString().isEmpty()) {
-            	throw new InvalidInputException("Enter Valid User Id");
-            }
-    		authService.isAuthorised(userId,request.getHeader("Authorization").split(" ")[1]);
-    		if(error.hasErrors()) {
-    			String response = error.getAllErrors().stream().map(ObjectError::getDefaultMessage)
-    					.collect(Collectors.joining(","));
-    			throw new InvalidInputException(response);
-    		}
+		catch(Exception e) {
+			return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@PutMapping(value = "/{userId}")
+	public ResponseEntity<?> updateUserDetails(@PathVariable("userId") Long userId,@Valid @RequestBody UserUpdateRequestModel user,
+											   HttpServletRequest request,Errors error){
+		try {
+			logger.info("Start of UserController.updateUserDetails with userId ");
+			statsDClient.incrementCounter("endpoint.updateUserDetails.http.put");
+			if(userId.toString().isBlank()||userId.toString().isEmpty()) {
+				throw new InvalidInputException("Enter Valid User Id");
+			}
+			authService.isAuthorised(userId,request.getHeader("Authorization").split(" ")[1]);
+			if(error.hasErrors()) {
+				String response = error.getAllErrors().stream().map(ObjectError::getDefaultMessage)
+						.collect(Collectors.joining(","));
+				throw new InvalidInputException(response);
+			}
 			return new ResponseEntity<String>( userService.updateUserDetails(userId,user),HttpStatus.NO_CONTENT);
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
-    	catch (UserAuthrizationExeception e) {
+		catch (UserAuthrizationExeception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.FORBIDDEN);
 		}
-    	catch (DataNotFoundExeception e) {
+		catch (DataNotFoundExeception e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.NOT_FOUND);
 		}
-    	catch(Exception e) {
-    		return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-        
-    }
-    
-    @PostMapping()
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user,Errors error){
-    	try {
-    		if(error.hasErrors()) {
-    			String response = error.getAllErrors().stream().map(ObjectError::getDefaultMessage)
-    					.collect(Collectors.joining(","));
-    			throw new InvalidInputException(response);
-    		}
+		catch(Exception e) {
+			return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@PostMapping()
+	public ResponseEntity<?> createUser(@Valid @RequestBody User user,Errors error){
+		try {
+			logger.info("Start of UserController.createUser with userId "+user.getId());
+			statsDClient.incrementCounter("endpoint.createUser.http.post");
+			if(error.hasErrors()) {
+				String response = error.getAllErrors().stream().map(ObjectError::getDefaultMessage)
+						.collect(Collectors.joining(","));
+				throw new InvalidInputException(response);
+			}
 			return new ResponseEntity<UserDto>( userService.createUser(user),HttpStatus.CREATED);
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
-    	catch (UserExistException e) {
+		catch (UserExistException e) {
 			// TODO Auto-generated catch block
 			return new ResponseEntity<String>( e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
-    	catch(Exception e) {
-    		return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
-    	}
-    }
+		catch(Exception e) {
+			return new ResponseEntity<String>(UserConstants.InternalErr,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
