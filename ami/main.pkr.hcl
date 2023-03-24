@@ -33,7 +33,7 @@ variable "aws_secret_access_key" {
 }
 variable "ami_user" {
   type    = list(string)
-   default = ["716408334627", "534478236537"]
+  default = ["716408334627", "534478236537"]
 }
 
 source "amazon-ebs" "my-ami" {
@@ -76,12 +76,16 @@ build {
   }
 
   provisioner "file" {
-    source      = "webservice.service"
-    destination = "/tmp/"
+    source      = "cloudwatch-config.json"
+    destination = "/tmp/cloudwatch-config.json"
   }
-
   provisioner "shell" {
     script = "script.sh"
+  }
+
+  provisioner "file" {
+    source      = "webservice.service"
+    destination = "/tmp/"
   }
 
 }

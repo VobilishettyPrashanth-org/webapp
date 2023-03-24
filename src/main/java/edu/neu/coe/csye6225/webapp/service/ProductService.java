@@ -86,40 +86,40 @@ public class ProductService {
 			throw new InvalidInputException("Request can't be empty");
 		for (Map.Entry<String, Object> map : updates.entrySet()) {
 			switch (map.getKey()) {
-			case "name":
-				String name = (String) map.getValue();
-				if (name.isBlank() || name.isEmpty() || name == null)
-					throw new InvalidInputException("Product Name can't be null/empty");
-				else
-					p.setName(name);
-				break;
-			case "description":
-				String description = (String) map.getValue();
-				if (description.isBlank() || description.isEmpty() || description == null)
-					throw new InvalidInputException("Product description can't be null/empty");
-				p.setDescription(description);
-				break;
-			case "sku":
-				String sku = (String) map.getValue();
-				if (sku.isBlank() || sku.isEmpty() || sku == null)
-					throw new InvalidInputException("Product SKU can't be null/empty");
-				checkSku(p.getId(), p.getOwnerUserId(), sku, "PostCheck");
-				p.setSku(sku);
-				break;
-			case "manufacture":
-				String manufacture = (String) map.getValue();
-				if (manufacture.isBlank() || manufacture.isEmpty() || manufacture == null)
-					throw new InvalidInputException("Product manufacture can't be null/empty");
-				p.setManufacturer(manufacture);
-				break;
-			case "quantity":
+				case "name":
+					String name = (String) map.getValue();
+					if (name.isBlank() || name.isEmpty() || name == null)
+						throw new InvalidInputException("Product Name can't be null/empty");
+					else
+						p.setName(name);
+					break;
+				case "description":
+					String description = (String) map.getValue();
+					if (description.isBlank() || description.isEmpty() || description == null)
+						throw new InvalidInputException("Product description can't be null/empty");
+					p.setDescription(description);
+					break;
+				case "sku":
+					String sku = (String) map.getValue();
+					if (sku.isBlank() || sku.isEmpty() || sku == null)
+						throw new InvalidInputException("Product SKU can't be null/empty");
+					checkSku(p.getId(), p.getOwnerUserId(), sku, "PostCheck");
+					p.setSku(sku);
+					break;
+				case "manufacture":
+					String manufacture = (String) map.getValue();
+					if (manufacture.isBlank() || manufacture.isEmpty() || manufacture == null)
+						throw new InvalidInputException("Product manufacture can't be null/empty");
+					p.setManufacturer(manufacture);
+					break;
+				case "quantity":
 //				String qString = String.valueOf(map.getValue());
 //				Integer quantity=Integer.parseInt(qString)
-				int quantity=0;
-				if (quantity < 0 || quantity > 100)
-					throw new InvalidInputException("Product quantity should be btw 1 and 100");
-				p.setQuantity(quantity);
-				break;
+					int quantity=0;
+					if (quantity < 0 || quantity > 100)
+						throw new InvalidInputException("Product quantity should be btw 1 and 100");
+					p.setQuantity(quantity);
+					break;
 			}
 		}
 		productRepo.saveAndFlush(p);

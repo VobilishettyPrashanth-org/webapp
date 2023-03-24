@@ -27,15 +27,15 @@ public class ImageService {
 
 	@Value("${aws.s3.bucketName}")
 	private String bucketName;
-	
+
 	@Autowired
 	private FileStore fileStore;
 
 	@Autowired
 	private ImageRepository imageRepository;
-	
+
 	@Autowired
-    private AmazonS3 amazonS3;
+	private AmazonS3 amazonS3;
 
 	public Image saveImage(Long productId, Long userId, MultipartFile file) throws InvalidInputException   {
 		// check if the file is empty
@@ -95,9 +95,9 @@ public class ImageService {
 		fileStore.deleteFile(bucketName,path_name);
 		imageRepository.deleteById(imageId);
 		return imgObj.get();
-	
+
 	}
-	
+
 	public void deleteImageByProductId(Long productId, Long userId)  throws DataNotFoundExeception {
 		// TODO Auto-generated method stub
 		String path = String.format("%s/%s/", userId, productId);
