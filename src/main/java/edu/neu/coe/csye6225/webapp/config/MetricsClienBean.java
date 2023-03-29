@@ -9,21 +9,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-  public class MetricsClienBean {
- 
-  @Value("${publish.metrics}")
-  private boolean publishMetrics;
+public class MetricsClienBean {
 
- @Value("${metrics.server.hostname}")
-  private String metricsServerHost;
+    @Value("${publish.metrics}")
+    private boolean publishMetrics;
 
-  @Value("${metrics.server.port}")
-  private int metricsServerPort;
-@Bean
- public StatsDClient metricsClient() {
-    if(publishMetrics)
-        return new 
-  NonBlockingStatsDClient(metricsServerHost, metricsServerHost, metricsServerPort);
-  return new NoOpStatsDClient();
-   }
+    @Value("${metrics.server.hostname}")
+    private String metricsServerHost;
+
+    @Value("${metrics.server.port}")
+    private int metricsServerPort;
+    @Bean
+    public StatsDClient metricsClient() {
+        if(publishMetrics)
+            return new
+                    NonBlockingStatsDClient(metricsServerHost, metricsServerHost, metricsServerPort);
+        return new NoOpStatsDClient();
+    }
 }
