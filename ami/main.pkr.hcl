@@ -90,7 +90,6 @@ build {
   post-processor "ami-fest"{
     output = "manifest.json"
     strip_path = true
-
   }
 
 }
