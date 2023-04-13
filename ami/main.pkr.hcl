@@ -87,8 +87,8 @@ build {
     source      = "webservice.service"
     destination = "/tmp/"
   }
-  post-processor "ami-fest"{
-    output = "manifest.json"
+  post-processor "manifest" {
+    output     = "manifest.json"
     strip_path = true
   }
 
