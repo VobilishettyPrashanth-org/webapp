@@ -43,7 +43,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController()
-@RequestMapping("v1/product")
+@RequestMapping("v2/product")
 public class ProductController {
 
 	@Autowired
