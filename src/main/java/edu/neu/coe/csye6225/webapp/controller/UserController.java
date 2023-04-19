@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController()
-@RequestMapping("v1/user")
+@RequestMapping("v2/user")
 public class UserController {
 
 	@Autowired
